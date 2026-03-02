@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { Search, UserPlus } from "lucide-react";
 import { useGetUsers } from "@/hooks/useChat";
+import Image from "next/image";
 
 export default function ConnectionsPage() {
   const { data: users } = useGetUsers();
+  console.log(users, "data");
 
   return (
     <div>
@@ -25,7 +27,7 @@ export default function ConnectionsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {users?.map((c) => (
           <div
-            key={c.id}
+            key={c._id}
             className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col items-center text-center hover:shadow-md transition-shadow"
           >
             {/* Clicking name/avatar → /connections/profile/[id] — URL changes */}
@@ -33,11 +35,8 @@ export default function ConnectionsPage() {
               href={`/connections/profile/${c.id}`}
               className="flex flex-col items-center"
             >
-              <div
-                className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg mb-3"
-                style={{ background: c.profilePic }}
-              >
-                {c.profilePic}
+              <div className="w-16 h-16 rounded-full flex items-center justify-center text-white font-bold text-lg mb-3">
+                <img src={c.profilePic || null} />
               </div>
               <p className="font-bold text-gray-900 text-sm hover:text-indigo-600 transition-colors">
                 {c.fullName}

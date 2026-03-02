@@ -1,27 +1,3 @@
-// "use client";
-
-// import { useRouter } from "next/navigation";
-// import { useEffect } from "react";
-// import DashBoardSidebar from "@/components/DashBoardSideBar";
-// import { useAuthUser } from "@/hooks/useAuth";
-
-// export default function Home() {
-//   const { authUser } = useAuthUser();
-
-//   console.log(authUser, "authUsers");
-//   const router = useRouter();
-
-//   useEffect(() => {
-//     if (!authUser) {
-//       router.push("/login");
-//     } else {
-//       router.push("/dashboard/feed");
-//     }
-//   }, [authUser, router]);
-
-//   if (!authUser) return null;
-//   return <DashBoardSidebar />;
-// }
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -30,7 +6,7 @@ import DashBoardSidebar from "@/components/DashBoardSideBar";
 import { useAuthUser } from "@/hooks/useAuth";
 
 export default function Home() {
-  const { authUser, isCheckingAuth } = useAuthUser(); // ✅ match the hook
+  const { authUser, isCheckingAuth } = useAuthUser();
   const router = useRouter();
   console.log(authUser, "authUser");
 

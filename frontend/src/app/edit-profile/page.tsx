@@ -1,10 +1,10 @@
-import Messages from "@/pages/Messages";
+import ProfilePage from "@/pages/ProfilePage";
 import React from "react";
 
 const page = () => {
   return (
     <div>
-      <Messages />
+      <ProfilePage />
     </div>
   );
 };

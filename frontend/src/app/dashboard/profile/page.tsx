@@ -6,6 +6,7 @@ import PostCard from "@/components/PostCard";
 import { POSTS } from "@/lib/data";
 import { useAuthUser } from "@/hooks/useAuth";
 import { useGetMyPosts } from "@/hooks/usePost";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const authUser = useAuthUser();
@@ -29,9 +30,12 @@ export default function ProfilePage() {
             >
               ME
             </div>
-            <button className="px-4 py-2 rounded-xl text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors flex items-center gap-1.5">
-              <Settings size={13} /> Edit Profile
-            </button>
+
+            <Link href="/edit-profile">
+              <button className="px-4 py-2 rounded-xl text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors flex items-center gap-1.5">
+                <Settings size={13} /> Edit Profile
+              </button>
+            </Link>
           </div>
           <h2 className="font-extrabold text-gray-900 text-xl tracking-tight">
             {authUser.authUser.fullName}

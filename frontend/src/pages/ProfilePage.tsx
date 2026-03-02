@@ -1,53 +1,62 @@
+"use client";
 import { useState } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import { Camera, Mail, User } from "lucide-react";
+import { Camera, Cross, Mail, User, X } from "lucide-react";
+import { useAuthUser, useUpdateProfile } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const ProfilePage = () => {
-  const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
-  const [selectedImg, setSelectedImg] = useState(null);
+  const { authUser } = useAuthUser();
+  const { mutate: updateProfile, isPending: isUpdatingProfile } =
+    useUpdateProfile(); // ✅ mutate not data
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     const reader = new FileReader();
-
     reader.readAsDataURL(file);
-
-    reader.onload = async () => {
-      const base64Image = reader.result;
+    reader.onload = () => {
+      const base64Image = reader.result as string;
       setSelectedImg(base64Image);
-      await updateProfile({ profilePic: base64Image });
+      updateProfile({ profilePic: base64Image }); // ✅ call mutate directly
     };
   };
 
   return (
-    <div className="h-full pt-10">
+    <div className="h-full pt-10 bg-blue-100">
       <div className="max-w-2xl mx-auto p-4 py-8">
-        <div className="bg-base-300 rounded-xl p-6 space-y-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-semibold ">Profile</h1>
-            <p className="mt-2">Your profile information</p>
+        <div className="bg-gray-100 rounded-xl p-6 space-y-8">
+          <div className="text-center flex items-center justify-end">
+            <button
+              onClick={() => {
+                router.push("/dashboard/profile");
+              }}
+            >
+              <X />
+            </button>
           </div>
-
-          {/* avatar upload section */}
-
+          <div className="text-center ">
+            <div>
+              {" "}
+              <h1 className="text-2xl font-semibold">Profile</h1>
+              <p className="mt-2">Your profile information</p>
+            </div>
+          </div>
+          {/* Avatar upload */}
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src="/public/Avatar1.png"
+                src={selectedImg || authUser?.profilePic || "/Avatar1.png"} // ✅ show selected or current
                 alt="Profile"
-                className="size-32 rounded-full object-cover border-4 "
+                className="size-32 rounded-full object-cover border-4"
               />
               <label
                 htmlFor="avatar-upload"
-                className={`
-                  absolute bottom-0 right-0 
-                  bg-base-content hover:scale-105
-                  p-2 rounded-full cursor-pointer 
-                  transition-all duration-200
-                  ${isUpdatingProfile ? "animate-pulse pointer-events-none" : ""}
-                `}
+                className={`absolute bottom-0 right-0 bg-base-content hover:scale-105 p-2 rounded-full cursor-pointer transition-all duration-200 ${
+                  isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
+                }`}
               >
                 <Camera className="w-5 h-5 text-base-200" />
                 <input
@@ -90,11 +99,11 @@ const ProfilePage = () => {
           </div>
 
           <div className="mt-6 bg-base-300 rounded-xl p-6">
-            <h2 className="text-lg font-medium  mb-4">Account Information</h2>
+            <h2 className="text-lg font-medium mb-4">Account Information</h2>
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between py-2 border-b border-zinc-700">
                 <span>Member Since</span>
-                {/* <span>{authUser.createdAt?.split("T")[0]}</span> */}
+                <span>{authUser?.createdAt?.split("T")[0]}</span>
               </div>
               <div className="flex items-center justify-between py-2">
                 <span>Account Status</span>
@@ -107,4 +116,5 @@ const ProfilePage = () => {
     </div>
   );
 };
+
 export default ProfilePage;

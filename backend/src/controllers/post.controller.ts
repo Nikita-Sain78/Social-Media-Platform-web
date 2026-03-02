@@ -3,61 +3,15 @@ import Post from "../models/post.model";
 import mongoose from "mongoose";
 import { uploadToCloudinary } from "../middlewares/upload";
 
-// export const createPost = async (req: Request, res: Response) => {
-//   try {
-//     const { title, description, media, hashtags } = req.body;
-//     const userId = req.user._id;
-//     if (!userId) {
-//       return res.status(403).json({
-//         success: false,
-//         message: "Unauthorized",
-//       });
-//     }
-//     console.log("hello");
-//     console.log(req.user);
-//     console.log(req.body);
-//     if (!title && !description && !media) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Title is required",
-//       });
-//     }
-
-//     const post = await Post.create({
-//       title,
-//       description,
-//       media,
-//       createdBy: userId,
-//       hashtags: hashtags || [],
-//     });
-
-//     return res.status(201).json({
-//       success: true,
-//       message: "Post Created Successfully",
-//       post,
-//     });
-//   } catch (error) {
-//     return res.status(500).json({
-//       success: false,
-//       message: "Error in Creating the post",
-//     });
-//   }
-// };
-
 export const createPost = async (req: Request, res: Response) => {
   try {
     const { description, hashtags } = req.body;
 
     const userId = req.user?._id;
+    const userName = req.user?.fullName;
     if (!userId) {
       return res.status(403).json({ success: false, message: "Unauthorized" });
     }
-
-    // if (!description) {
-    //   return res
-    //     .status(400)
-    //     .json({ success: false, message: "Description is required" });
-    // }
 
     let mediaUrl: string | null = null;
 
@@ -68,10 +22,12 @@ export const createPost = async (req: Request, res: Response) => {
     }
 
     const post = await Post.create({
+      userName: userName,
       description: description,
       media: mediaUrl,
       createdBy: userId,
       hashtags: hashtags || [],
+      createdAt: Date.now(),
     });
 
     return res.status(201).json({

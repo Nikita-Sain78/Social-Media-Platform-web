@@ -61,6 +61,7 @@ export function useGetMyPosts() {
     queryKey: postKeys.myPosts(),
     queryFn: async () => {
       const res = await axiosInstance.get("/posts/my-posts");
+      console.log(res, "res");
       return res.data.userPosts;
     },
   });
@@ -79,9 +80,6 @@ export function useGetPost(postId: string | null) {
   });
 }
 
-// ─── 4. Create Post ───────────────────────────────────────────
-// Usage: const { mutate: createPost, isPending } = useCreatePost();
-//        createPost({ title, description, media, hashtags });
 export function useCreatePost() {
   const queryClient = useQueryClient();
 
@@ -104,9 +102,6 @@ export function useCreatePost() {
   });
 }
 
-// ─── 5. Delete Post ───────────────────────────────────────────
-// Usage: const { mutate: deletePost, isPending } = useDeletePost();
-//        deletePost(postId);
 export function useDeletePost() {
   const queryClient = useQueryClient();
 
@@ -129,39 +124,13 @@ export function useDeletePost() {
   });
 }
 
-// ─── 6. Like / Unlike Post ────────────────────────────────────
-// Usage: const { mutate: toggleLike } = useToggleLike();
-//        toggleLike(postId);
-// export function useToggleLike() {
-//   const queryClient = useQueryClient();
-
-//   return useMutation({
-//     mutationFn: async (postId: string) => {
-//       const res = await axiosInstance.post<Post>(`/posts/${postId}/like`);
-//       return res.data;
-//     },
-//     onSuccess: (updatedPost) => {
-//       // Update the post in feed cache optimistically
-//       queryClient.setQueryData<Post[]>(postKeys.feed(), (old = []) =>
-//         old.map((p) => (p._id === updatedPost._id ? updatedPost : p)),
-//       );
-//       // Update single post cache too
-//       queryClient.setQueryData(postKeys.single(updatedPost._id), updatedPost);
-//     },
-//     onError: handleError,
-//   });
-// }
-
-// ─── 7. Add Comment ───────────────────────────────────────────
-// Usage: const { mutate: addComment, isPending } = useAddComment();
-//        addComment({ postId, text });
 export function useAddComment() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ postId, text }: { postId: string; text: string }) => {
-      const res = await axiosInstance.post(`/posts/${postId}/comment`, {
-        text,
+      const res = await axiosInstance.post(`/comment/add-comment/${postId}`, {
+        comment: text,
       });
       return { postId, comment: res.data };
     },
@@ -179,9 +148,45 @@ export function useAddComment() {
   });
 }
 
+export function useGetComments(postId: string) {
+  return useQuery({
+    queryKey: postKeys.comments(postId),
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/comment/get-comments/${postId}`);
+      return res.data.comments;
+    },
+    enabled: !!postId,
+  });
+}
+
+export function useDeleteComment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      commentId,
+      postId,
+    }: {
+      commentId: string;
+      postId: string;
+    }) => {
+      await axiosInstance.delete(`/comment/delete-comment/${commentId}`);
+      return { commentId, postId };
+    },
+    onSuccess: ({ postId }) => {
+      queryClient.invalidateQueries({ queryKey: postKeys.comments(postId) });
+      queryClient.setQueryData<Post[]>(postKeys.feed(), (old = []) =>
+        old.map((p) =>
+          p._id === postId ? { ...p, commentCount: p.commentCount - 1 } : p,
+        ),
+      );
+    },
+    onError: handleError,
+  });
+}
+
 export function useToggleLike() {
   const queryClient = useQueryClient();
-  console.log("hiting this api");
 
   return useMutation({
     mutationFn: async (postId: string) => {

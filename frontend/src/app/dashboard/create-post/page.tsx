@@ -4,10 +4,12 @@ import { useState, useRef } from "react";
 import { ImageIcon, X } from "lucide-react";
 import { useAuthUser } from "@/hooks/useAuth";
 import { useCreatePost } from "@/hooks/usePost";
+import { useRouter } from "next/navigation";
 
 export default function CreatePost() {
   const [text, setText] = useState("");
   const [image, setImage] = useState<string | null>(null);
+  const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const { authUser } = useAuthUser();
   const { mutate: createPostData } = useCreatePost();
@@ -28,6 +30,7 @@ export default function CreatePost() {
     });
     setText("");
     setImage(null);
+    router.push("/dashboard/feed");
   };
 
   return (

@@ -12,83 +12,18 @@ import { useEffect } from "react";
 export default function FeedPage() {
   // useEffect(() => {
   const { data: postData } = useGetFeedPosts();
-  console.log(postData, "data");
 
-  // if (isLoading) return <div>Loading...</div>;
-  // });
   return (
     <div className="flex gap-6 max-w-5xl mx-auto">
       {/* ── Center feed ── */}
       <div className="flex-1 min-w-0 flex flex-col gap-5">
-        {/* Stories */}
-        {/* <div className="flex gap-3 overflow-x-auto pb-1">
-          <div className="flex-shrink-0 w-28 h-40 rounded-2xl border-2 border-dashed border-indigo-200 bg-white flex flex-col items-center justify-center gap-2 cursor-pointer hover:border-indigo-400 transition-colors group">
-            <div className="w-9 h-9 rounded-full bg-indigo-500 flex items-center justify-center group-hover:bg-indigo-600 transition-colors">
-              <Plus size={18} color="#fff" />
-            </div>
-            <span className="text-xs font-semibold text-gray-500">
-              Create Story
-            </span>
-          </div>
-          {POSTS.map((p) => (
-            <Link
-              key={p.id}
-              href={`/feed/post/${p.id}`}
-              className="flex-shrink-0 w-28 h-40 rounded-2xl overflow-hidden relative group"
-            >
-              {p.image ? (
-                <img
-                  src={p.image}
-                  alt=""
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              ) : (
-                <div
-                  className="w-full h-full"
-                  style={{ background: p.avatarBg }}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-              <div
-                className="absolute top-2 left-2 w-7 h-7 rounded-full border-2 border-indigo-400 flex items-center justify-center text-white text-xs font-bold"
-                style={{ background: p.avatarBg }}
-              >
-                {p.avatar[0]}
-              </div>
-              <p className="absolute bottom-2 left-2 right-2 text-white text-xs font-semibold">
-                {p.time}
-              </p>
-            </Link>
-          ))}
-        </div> */}
-
-        {/* Create post bar */}
-        {/* <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-          <Avatar
-            initials="ME"
-            bg="linear-gradient(135deg,#6366f1,#8b5cf6)"
-            size="w-9 h-9"
-            textSize="text-xs"
-          />
-          <div className="flex-1 bg-gray-50 rounded-xl px-4 py-2.5 text-sm text-gray-400 cursor-pointer hover:bg-gray-100 transition-colors">
-            What&apos;s on your mind?
-          </div>
-          <button
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-bold text-white flex-shrink-0"
-            style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
-          >
-            <Plus size={15} /> Post
-          </button>
-        </div> */}
-
-        {/* Posts list — each PostCard has Links inside pointing to /feed/post/[id] */}
         {postData?.map((p) => (
           <PostCard key={p._id} post={p} />
         ))}
       </div>
 
       {/* ── Right sidebar ── */}
-      <div className="hidden xl:flex flex-col gap-5 w-72 flex-shrink-0">
+      <div className="hidden xl:flex flex-col gap-5 w-72 flex-shrink-0 sticky">
         {/* Ad */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
           <div className="px-4 pt-4 pb-2">

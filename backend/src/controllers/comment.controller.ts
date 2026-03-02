@@ -67,25 +67,22 @@ export const addComment = async (req: Request, res: Response) => {
 export const deleteComment = async (req: Request, res: Response) => {
   try {
     const commentId = req.params.id;
-    console.log(commentId);
     const userId = req.user?._id;
-    console.log(userId);
 
     if (!userId)
       return res.status(401).json({ success: false, message: "Unauthorized" });
 
     const comment = await Comment.findById(commentId);
-    console.log(comment);
+
+    const postedBy = await Post.findById(comment?.post);
     if (!comment)
       return res
         .status(404)
         .json({ success: false, message: "Comment not found" });
 
-    // Only owner can delete (optional security)
-    if (comment.commentedBy?.toString() !== userId.toString())
+    if (postedBy?.createdBy?.toString() !== userId.toString())
       return res.status(403).json({ success: false, message: "Not allowed" });
 
-    // delete main comment
     await Comment.findByIdAndDelete(commentId);
 
     return res.status(200).json({

@@ -12,9 +12,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   const router = useRouter();
 
-  if (!authUser) {
-    router.push("/login");
-  }
   useEffect(() => {
     if (isCheckingAuth) return;
 

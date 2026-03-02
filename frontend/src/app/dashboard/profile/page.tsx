@@ -12,7 +12,6 @@ export default function ProfilePage() {
   const authUser = useAuthUser();
   const { data: myPosts } = useGetMyPosts();
   console.log(myPosts, "posts");
-  console.log("authuser", authUser);
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-5">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">

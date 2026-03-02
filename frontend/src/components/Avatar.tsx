@@ -12,7 +12,7 @@ export default function Avatar({
 }) {
   return (
     <div
-      className={`${size} rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${textSize}`}
+      className={`${size} capitalize rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${textSize}`}
       style={{ background: bg }}
     >
       {initials}

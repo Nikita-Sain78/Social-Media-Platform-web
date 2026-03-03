@@ -78,7 +78,7 @@ export default function ConnectionsPage() {
         <h2 className="font-bold text-gray-900 text-lg">Follow Requests</h2>
       </div>
 
-      {users.length > 0 ? (
+      {users?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-9 gap-y-5">
           {users?.map((c) => (
             <UserCard key={c._id} c={c} />

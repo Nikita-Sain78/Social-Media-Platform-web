@@ -17,6 +17,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
     if (!authUser) {
       router.push("/login");
+    } else {
+      router.push("/dashboard/feed");
     }
   }, [authUser, isCheckingAuth, router]);
 

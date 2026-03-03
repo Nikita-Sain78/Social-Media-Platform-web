@@ -14,21 +14,6 @@ const postSchema = new mongoose.Schema({
   userName: {
     type: String,
   },
-  likedBy: [
-    {
-      userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-      userName: {
-        type: String,
-      },
-      likedAt: {
-        type: Date,
-        default: Date.now(),
-      },
-    },
-  ],
 
   likesCount: { type: Number, default: 0 },
   isLikedByMe: { type: Boolean },

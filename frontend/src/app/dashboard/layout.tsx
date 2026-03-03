@@ -17,26 +17,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
     if (!authUser) {
       router.push("/login");
-    } else {
-      router.push("/dashboard/feed");
     }
   }, [authUser, isCheckingAuth, router]);
 
   return (
-    // <html lang="en">
-    //   <head>
-    //     <link
-    //       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-    //       rel="stylesheet"
-    //     />
-    //   </head>
-    //   <body
-    //     style={{
-    //       fontFamily: "'Plus Jakarta Sans',sans-serif",
-    //       margin: 0,
-    //       background: "#f9fafb",
-    //     }}
-    //   >
     <div className="min-h-screen flex bg-gray-50">
       {/* Fixed sidebar — always visible */}
       <DashBoardSidebar />
@@ -54,12 +38,5 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       {/* Mobile bottom nav */}
       <BottomNav />
     </div>
-
-    //     <style>{`
-    //       ::-webkit-scrollbar { width: 4px; }
-    //       ::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 99px; }
-    //     `}</style>
-    //   </body>
-    // </html>
   );
 }

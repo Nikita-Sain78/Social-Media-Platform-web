@@ -12,8 +12,6 @@ export default function Home() {
   useEffect(() => {
     if (!authUser) {
       router.push("/login");
-    } else {
-      router.push("/dashboard/feed");
     }
   }, [authUser, router]);
 

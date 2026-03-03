@@ -13,13 +13,15 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import { useLogout } from "@/hooks/useAuth";
+import { useAuthUser, useLogout } from "@/hooks/useAuth";
+import { useGetMessages } from "@/hooks/useChat";
+// // console.log(au);
 
 const NAV = [
   { href: "/dashboard/feed", label: "Feed", icon: Home },
   {
     href: "/dashboard/messages",
-    label: "Messages",
+    label: `Messages`,
     icon: MessageSquare,
   },
   { href: "/dashboard/discover", label: "Discover", icon: Users },
@@ -39,6 +41,10 @@ export default function DashBoardSidebar() {
     logout();
     router.push("/login");
   };
+  const authUser = useAuthUser();
+  const auth: string = authUser.authUser?._id;
+  const { data: getMessages } = useGetMessages(auth);
+  console.log(getMessages);
 
   return (
     <aside className="hidden md:flex flex-col w-56 bg-white border-r border-gray-100 shadow-sm fixed top-0 left-0 h-full z-30 px-3 py-5">

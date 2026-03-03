@@ -1,13 +1,14 @@
 // app/videoCall/page.tsx
 "use client";
 
-import { useAuthStore } from "../../store/useAuthStore";
+// import { useAuthStore } from "../../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import VideoCallPage from "../../pages/VideoCallPage";
+import { useAuthUser } from "@/hooks/useAuth";
 
 export default function VideoCall() {
-  const { authUser } = useAuthStore();
+  const { authUser } = useAuthUser();
   const router = useRouter();
 
   useEffect(() => {

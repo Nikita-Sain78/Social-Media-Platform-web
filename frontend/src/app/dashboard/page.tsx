@@ -15,8 +15,6 @@ export default function Home() {
 
     if (!authUser) {
       router.push("/login");
-    } else {
-      router.push("/dashboard/feed");
     }
   }, [authUser, isCheckingAuth, router]);
 

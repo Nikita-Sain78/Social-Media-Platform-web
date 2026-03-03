@@ -55,11 +55,10 @@ export function useGetMessages(userId: string | null) {
     queryKey: chatKeys.messages(userId ?? ""),
     queryFn: async () => {
       const res = await axiosInstance.get(`/messages/${userId}`);
-      // Backend marks as seen, we clear local unread count too
       clearUnreadForUser(userId!);
       return res.data;
     },
-    enabled: !!userId, // only run when a user is selected
+    enabled: !!userId,
   });
 }
 

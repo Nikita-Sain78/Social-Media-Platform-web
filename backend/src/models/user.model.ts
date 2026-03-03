@@ -34,18 +34,6 @@ const userSchema = new mongoose.Schema(
       enum: ["Public", "Private"],
       default: "Public",
     },
-    followers: [
-      {
-        Count: { type: Number },
-        followersName: { type: [String] },
-      },
-    ],
-    followingCount: [
-      {
-        Count: { type: Number },
-        followingName: { type: [String] },
-      },
-    ],
   },
   { timestamps: true },
 );

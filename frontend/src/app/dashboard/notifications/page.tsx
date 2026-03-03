@@ -8,6 +8,7 @@ import {
   useGetFollowRequests,
   useRejectFollowRequest,
 } from "@/hooks/useFollow";
+import NoFollowRequests from "@/components/NoFollowRequests";
 
 function UserCard({ c }: { c: any }) {
   const { mutate: followUser, isPending } = useFollowUser();
@@ -53,8 +54,7 @@ function UserCard({ c }: { c: any }) {
           onClick={() => acceptFollowRequests(c._id, c.from._id)}
           disabled={isPending}
         >
-          <UserPlus size={13} />{" "}
-          {isPending ? "Connecting..." : "Accept and follow"}
+          <UserPlus size={13} /> {isPending ? "Following..." : "Accept "}
         </button>
         <button
           className="w-full flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-white disabled:opacity-60"
@@ -62,7 +62,7 @@ function UserCard({ c }: { c: any }) {
           onClick={() => declineFollowRequest(c._id)}
           disabled={isPending}
         >
-          <UserPlus size={13} /> {isPending ? "Connecting..." : "Decline"}
+          <UserPlus size={13} /> {isPending ? "Declining.." : "Decline"}
         </button>
       </div>
     </div>
@@ -75,24 +75,21 @@ export default function ConnectionsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-bold text-gray-900 text-lg">People you may know</h2>
-        <div className="relative">
-          <Search
-            size={13}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-          />
-          <input
-            placeholder="Search people…"
-            className="pl-8 pr-3 py-2 rounded-xl bg-white border border-gray-200 text-xs outline-none placeholder-gray-300 focus:border-indigo-300 w-44"
-          />
-        </div>
+        <h2 className="font-bold text-gray-900 text-lg">Follow Requests</h2>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        {users?.map((c) => (
-          <UserCard key={c._id} c={c} />
-        ))}
-      </div>
+      {users.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-9 gap-y-5">
+          {users?.map((c) => (
+            <UserCard key={c._id} c={c} />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full text-center">
+          {" "}
+          <NoFollowRequests />
+        </div>
+      )}
     </div>
   );
 }

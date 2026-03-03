@@ -205,11 +205,17 @@ const Sidebar = () => {
           >
             {/* Avatar + online dot */}
             <div className="relative mx-auto lg:mx-0">
-              <img
-                src={user.profilePic || null}
-                alt={user.fullName}
-                className="size-7 object-cover rounded-full ring-black"
-              />
+              <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-400 to-purple-500 text-white  text-lg mb-3">
+                {user.profilePic ? (
+                  <img
+                    src={user.profilePic}
+                    alt={user.fullName}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  user.fullName?.charAt(0).toUpperCase()
+                )}
+              </div>
               {onlineUsers.includes(user._id) && (
                 <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
               )}
@@ -217,7 +223,9 @@ const Sidebar = () => {
 
             {/* User info */}
             <div className="hidden lg:block text-left min-w-0">
-              <div className="font-medium truncate">{user.fullName}</div>
+              <div className="font-medium truncate text-sm">
+                {user.fullName}
+              </div>
               <div className="text-sm text-zinc-400">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
                 {unreadCounts?.[user._id] > 0 && (

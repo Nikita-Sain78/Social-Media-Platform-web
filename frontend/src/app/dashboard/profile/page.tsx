@@ -16,6 +16,7 @@ import {
   // useGetFollowers,
   // useGetFollowing,
 } from "@/hooks/useFollow";
+import NoPostsYet from "@/components/NoPostsYet";
 
 export default function ProfilePage() {
   const authUser = useAuthUser();
@@ -80,9 +81,17 @@ export default function ProfilePage() {
       </div>
 
       <h3 className="font-bold text-gray-900 text-sm px-1">My Posts</h3>
-      {myPosts?.map((p) => (
-        <PostCard key={p._id} post={p} />
-      ))}
+      {myPosts?.length > 0 ? (
+        <div>
+          {myPosts?.map((p) => (
+            <PostCard key={p._id} post={p} />
+          ))}
+        </div>
+      ) : (
+        <div>
+          <NoPostsYet />
+        </div>
+      )}
     </div>
   );
 }

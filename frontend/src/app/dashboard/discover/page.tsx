@@ -32,16 +32,16 @@ function UserCard({ c }: { c: any }) {
       <span className="text-xs font-semibold text-indigo-500 bg-indigo-50 px-2.5 py-0.5 rounded-full mb-3">
         {c.field}
       </span>
-      <p className="text-xs text-gray-400 mb-4">
+      {/* <p className="text-xs text-gray-400 mb-4">
         {c.mutual} mutual connections
-      </p>
+      </p> */}
       <button
-        className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60"
+        className="w-24 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-white disabled:opacity-60"
         style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
         onClick={() => followUser(c._id)} // ✅ arrow function, not direct call
         disabled={isPending}
       >
-        <UserPlus size={13} /> {isPending ? "Connecting..." : "Connect"}
+        <UserPlus size={13} /> {isPending ? "Following..." : "Follow"}
       </button>
     </div>
   );
@@ -66,7 +66,7 @@ export default function ConnectionsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-11 gap-y-7">
         {users?.map((c) => (
           <UserCard key={c._id} c={c} />
         ))}

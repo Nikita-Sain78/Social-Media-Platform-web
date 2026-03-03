@@ -5,12 +5,10 @@ import Link from "next/link";
 import { Plus, TrendingUp } from "lucide-react";
 import PostCard from "@/components/PostCard";
 import Avatar from "@/components/Avatar";
-import { POSTS, MESSAGES, DISCOVER_TOPICS } from "@/lib/data";
+import { MESSAGES, DISCOVER_TOPICS } from "@/lib/data";
 import { useGetFeedPosts } from "@/hooks/usePost";
-import { useEffect } from "react";
 
 export default function FeedPage() {
-  // useEffect(() => {
   const { data: postData } = useGetFeedPosts();
 
   return (

@@ -2,6 +2,7 @@ import { Video, X } from "lucide-react";
 // import { useAuthStore } from "../store/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useChatStore } from "@/store/useChatStore";
+import { useSendMessage } from "@/hooks/useChat";
 
 // Generate a random ID for room
 const generateRoomID = (len = 6) => {
@@ -15,7 +16,8 @@ const generateRoomID = (len = 6) => {
 };
 
 const ChatHeader = () => {
-  const { selectedUser, setSelectedUser, sendMessage } = useChatStore();
+  const { selectedUser, setSelectedUser } = useChatStore();
+  const { mutate: sendMessage, isPending: isSending } = useSendMessage();
   const { onlineUsers } = useChatStore();
   const router = useRouter();
 
@@ -41,12 +43,16 @@ const ChatHeader = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="avatar">
-            <div className="size-7 rounded-full relative ">
-              <img
-                src={selectedUser.profilePic}
-                alt="avatar"
-                className="size-7 object-fill"
-              />
+            <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-gradient-to-br from-indigo-400 to-purple-500 text-white text-lg mb-3">
+              {selectedUser?.profilePic ? (
+                <img
+                  src={selectedUser.profilePic}
+                  alt={selectedUser.fullName}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                selectedUser?.fullName?.charAt(0).toUpperCase()
+              )}
             </div>
           </div>
 

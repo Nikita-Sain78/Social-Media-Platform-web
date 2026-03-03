@@ -1,6 +1,6 @@
+import mongoose from "mongoose";
 import { Request, Response } from "express";
 import Post from "../models/post.model";
-import mongoose from "mongoose";
 import { uploadToCloudinary } from "../middlewares/upload";
 
 export const createPost = async (req: Request, res: Response) => {
@@ -120,7 +120,45 @@ export const updatePost = async (req: Request, res: Response) => {
 
 export const getAllPosts = async (req: Request, res: Response) => {
   try {
-    const posts = await Post.find();
+    const userId = req.user?._id;
+
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const posts = await Post.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "likes",
+          let: { postId: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$post", "$$postId"] },
+                    { $eq: ["$user", new mongoose.Types.ObjectId(userId)] },
+                  ],
+                },
+              },
+            },
+          ],
+          as: "userLike",
+        },
+      },
+      {
+        $addFields: {
+          isLikedByMe: { $gt: [{ $size: "$userLike" }, 0] },
+        },
+      },
+      {
+        $project: {
+          userLike: 0,
+        },
+      },
+    ]);
+
     return res.status(200).json({
       success: true,
       posts,
@@ -136,7 +174,7 @@ export const getAllPosts = async (req: Request, res: Response) => {
 
 export const getPost = async (req: Request, res: Response) => {
   try {
-    const postId: any = req.params.id;
+    const postId = req.params.id as string;
     const userId = req.user?._id;
 
     if (!mongoose.Types.ObjectId.isValid(postId)) {
@@ -145,18 +183,15 @@ export const getPost = async (req: Request, res: Response) => {
         .json({ success: false, message: "Invalid post ID" });
     }
 
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
     const post = await Post.aggregate([
       {
         $match: { _id: new mongoose.Types.ObjectId(postId) },
       },
-      {
-        $lookup: {
-          from: "likes",
-          localField: "_id",
-          foreignField: "post",
-          as: "likesData",
-        },
-      },
+      // ✅ Only lookup needed for user-specific like status
       {
         $lookup: {
           from: "likes",
@@ -178,14 +213,6 @@ export const getPost = async (req: Request, res: Response) => {
       },
       {
         $lookup: {
-          from: "comments",
-          localField: "_id",
-          foreignField: "post",
-          as: "commentsData",
-        },
-      },
-      {
-        $lookup: {
           from: "users",
           localField: "createdBy",
           foreignField: "_id",
@@ -198,21 +225,17 @@ export const getPost = async (req: Request, res: Response) => {
       },
       {
         $addFields: {
-          likesCount: { $size: "$likesData" },
-          commentCount: { $size: "$commentsData" },
+          // ✅ likesCount & commentCount read from stored fields (kept accurate by toggleLikePost)
           isLikedByMe: { $gt: [{ $size: "$userLike" }, 0] },
         },
       },
       {
         $project: {
-          likesData: 0,
-          commentsData: 0,
           userLike: 0,
           likedBy: 0,
           comments: 0,
         },
       },
-      // ❌ no $merge here
     ]);
 
     if (!post || post.length === 0) {
@@ -221,19 +244,9 @@ export const getPost = async (req: Request, res: Response) => {
         .json({ success: false, message: "Post not found" });
     }
 
-    const result = post[0];
-
-    // ✅ separately write only the non-user-specific counts back to MongoDB
-    await Post.findByIdAndUpdate(postId, {
-      $set: {
-        likesCount: result.likesCount,
-        commentCount: result.commentCount,
-      },
-    });
-
     return res.status(200).json({
       success: true,
-      post: result,
+      post: post[0], // ✅ includes isLikedByMe, likesCount, commentCount
     });
   } catch (error) {
     console.error("getPost error:", error);

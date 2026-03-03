@@ -190,17 +190,17 @@ export function useToggleLike() {
   return useMutation({
     mutationFn: async (postId: string) => {
       const res = await axiosInstance.post(`/like/${postId}`);
-      return res.data; // { success, liked }
+      return res.data; // { success, liked, likesCount }
     },
     onSuccess: (data, postId) => {
-      // Update feed cache instantly without refetching
+      // ✅ Use server values directly, no local math
       queryClient.setQueryData<Post[]>(postKeys.feed(), (old = []) =>
         old.map((p) =>
           p._id === postId
             ? {
                 ...p,
                 isLikedByMe: data.liked,
-                likesCount: data.liked ? p.likesCount + 1 : p.likesCount - 1,
+                likesCount: data.likesCount, // ✅ from server, not p.likesCount ± 1
               }
             : p,
         ),

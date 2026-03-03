@@ -9,6 +9,9 @@ import { useGetMyPosts } from "@/hooks/usePost";
 import Link from "next/link";
 import {
   followKeys,
+  useFollowUser,
+  useGetFollowers,
+  useGetFollowing,
   useGetFollowRequests,
   // useGetFollowers,
   // useGetFollowing,
@@ -18,10 +21,13 @@ export default function ProfilePage() {
   const authUser = useAuthUser();
   const auth = authUser.authUser;
   const { data: myPosts } = useGetMyPosts();
-  const { data: following } = useGetFollowRequests();
-  console.log("following", following);
-  // const { data: followers } = useGetFollowers(auth?._id ?? "");
-  // console.log(following, "following");
+  // const { data: following } = useGetFollowRequests();
+  const { mutate: followUser } = useFollowUser();
+  const { data: followers } = useGetFollowers(auth?._id ?? "");
+  const { data: following } = useGetFollowing(auth?._id ?? "");
+  console.log(auth?._id, "authId");
+  console.log(following, "following");
+  console.log(followers, "followers");
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-5">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -47,7 +53,7 @@ export default function ProfilePage() {
             </Link>
           </div>
           <h2 className="font-extrabold text-gray-900 text-xl tracking-tight">
-            {authUser.authUser.fullName}
+            {auth.fullName}
           </h2>
           <p className="text-sm text-gray-400 mb-3">
             @myhandle · <MapPin size={11} className="inline" /> San Francisco,
@@ -57,9 +63,9 @@ export default function ProfilePage() {
             Building things on the internet. Love design, code and coffee ☕
           </p>
           <div className="flex gap-6 mt-4">
-            {/* {[
-              [`${myPosts?.length ?? 0}`, "Posts"], // ✅ dynamic post count
-              [`${followers?.length ?? 0}`, "Followers"], // ✅ dynamic followers
+            {[
+              [`${myPosts?.length ?? 0}`, "Posts"],
+              [`${followers?.length ?? 0}`, "Followers"],
               [`${following?.length ?? 0}`, "Following"], // ✅ dynamic following
             ].map(([val, lbl]) => (
               <div key={lbl} className="text-center">
@@ -68,7 +74,7 @@ export default function ProfilePage() {
                 </p>
                 <p className="text-xs text-gray-400">{lbl}</p>
               </div>
-            ))} */}
+            ))}
           </div>
         </div>
       </div>

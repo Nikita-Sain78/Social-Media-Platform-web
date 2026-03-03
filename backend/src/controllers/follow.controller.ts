@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+// import mongoose from "mongoose";
 import Follow from "../models/follow.model";
 
 // Follow a user
@@ -83,11 +84,13 @@ export const unfollowUser = async (req: Request, res: Response) => {
 export const getFollowers = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
+    console.log(userId);
 
     const followers = await Follow.find({ following: userId }).populate(
       "follower",
       "fullName email profilePic",
     );
+    console.log(followers);
 
     return res.status(200).json({
       success: true,

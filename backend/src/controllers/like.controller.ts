@@ -4,7 +4,6 @@ import Post from "../models/post.model";
 
 export const toggleLikePost = async (req: Request, res: Response) => {
   try {
-    console.log("Toggle api hits");
     const postId = req.params.id;
     const userId = req.user?._id;
 

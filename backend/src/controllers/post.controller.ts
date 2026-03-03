@@ -82,7 +82,6 @@ export const updatePost = async (req: Request, res: Response) => {
   try {
     const postId = req.params.id;
     const userId = req.user.id;
-    console.log(userId);
     const { title, description, media } = req.body;
 
     const post = await Post.findById(postId);
@@ -120,12 +119,8 @@ export const updatePost = async (req: Request, res: Response) => {
 };
 
 export const getAllPosts = async (req: Request, res: Response) => {
-  console.log("GET ALL POSTS CONTROLLER HIT");
   try {
-    console.log("GET ALL POSTS CONTROLLER HIT");
-
     const posts = await Post.find();
-    console.log(posts, "posts");
     return res.status(200).json({
       success: true,
       posts,

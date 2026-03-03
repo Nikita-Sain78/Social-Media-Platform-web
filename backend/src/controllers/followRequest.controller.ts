@@ -40,7 +40,6 @@ export const followUser = async (req: Request, res: Response) => {
         .json({ success: true, message: "Follow request sent" });
     }
 
-    // Public account → follow directly
     await Follow.create({ follower: fromId, following: toId });
     return res
       .status(200)
@@ -50,7 +49,6 @@ export const followUser = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Accept a follow request
 export const acceptFollowRequest = async (req: Request, res: Response) => {
   try {
     const requestId = req.params.requestId;
@@ -75,7 +73,6 @@ export const acceptFollowRequest = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Reject a follow request
 export const rejectFollowRequest = async (req: Request, res: Response) => {
   try {
     const requestId = req.params.requestId;
@@ -97,17 +94,14 @@ export const rejectFollowRequest = async (req: Request, res: Response) => {
   }
 };
 
-// ✅ Get all pending follow requests for logged-in user
 export const getFollowRequests = async (req: Request, res: Response) => {
   try {
     const userId = req.user._id;
-    console.log(userId);
 
     const requests = await FollowRequest.find({
       to: userId,
       status: "pending",
     }).populate("from", "fullName userName profilePic");
-    console.log("requests", requests);
 
     return res.status(200).json({ success: true, requests });
   } catch (error) {

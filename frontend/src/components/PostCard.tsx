@@ -140,7 +140,6 @@ export default function PostCard({ post }: { post: any }) {
   const { data: comments } = useGetComments(post._id);
   const { mutate: deleteComment } = useDeleteComment();
 
-  console.log("comments", comments);
   const handleSubmit = (postId: any, text: any) => {
     addComment({ postId, text });
     setText(" ");

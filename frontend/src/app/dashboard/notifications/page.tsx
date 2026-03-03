@@ -2,12 +2,23 @@
 import Link from "next/link";
 import { Search, UserPlus } from "lucide-react";
 import { useGetUsers } from "@/hooks/useChat";
-import { useFollowUser, useGetFollowRequests } from "@/hooks/useFollow";
+import {
+  useAcceptFollowRequest,
+  useFollowUser,
+  useGetFollowRequests,
+  useRejectFollowRequest,
+} from "@/hooks/useFollow";
 
 function UserCard({ c }: { c: any }) {
   const { mutate: followUser, isPending } = useFollowUser();
   const { data: getFollowRequests } = useGetFollowRequests();
+  const { mutate: acceptFollowRequest } = useAcceptFollowRequest();
+  const { mutate: declineFollowRequest } = useRejectFollowRequest();
   console.log(getFollowRequests, "getFollowRequest");
+  const acceptFollowRequests = (acceptId: string, followId: string) => {
+    acceptFollowRequest(acceptId);
+    followUser(followId);
+  };
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col items-center text-center hover:shadow-md transition-shadow">
@@ -39,15 +50,16 @@ function UserCard({ c }: { c: any }) {
         <button
           className="w-full flex items-center justify-center gap-1.5 py-2 px-4 not-only:rounded-xl text-xs font-bold text-white disabled:opacity-60"
           style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
-          onClick={() => followUser(c._id)}
+          onClick={() => acceptFollowRequests(c._id, c.from._id)}
           disabled={isPending}
         >
-          <UserPlus size={13} /> {isPending ? "Connecting..." : "Accept"}
+          <UserPlus size={13} />{" "}
+          {isPending ? "Connecting..." : "Accept and follow"}
         </button>
         <button
           className="w-full flex items-center justify-center gap-1.5 py-2 px-4 rounded-xl text-xs font-bold text-white disabled:opacity-60"
           style={{ background: "linear-gradient(135deg,#4f46e5,#7c3aed)" }}
-          onClick={() => followUser(c._id)}
+          onClick={() => declineFollowRequest(c._id)}
           disabled={isPending}
         >
           <UserPlus size={13} /> {isPending ? "Connecting..." : "Decline"}

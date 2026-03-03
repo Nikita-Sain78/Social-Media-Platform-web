@@ -61,7 +61,6 @@ export function useGetMyPosts() {
     queryKey: postKeys.myPosts(),
     queryFn: async () => {
       const res = await axiosInstance.get("/posts/my-posts");
-      console.log(res, "res");
       return res.data.userPosts;
     },
   });

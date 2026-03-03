@@ -13,7 +13,6 @@ export default function CreatePost() {
   const fileRef = useRef<HTMLInputElement>(null);
   const { authUser } = useAuthUser();
   const { mutate: createPostData } = useCreatePost();
-  console.log(authUser);
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;

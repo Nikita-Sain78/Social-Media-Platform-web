@@ -46,8 +46,6 @@ export const addComment = async (req: Request, res: Response) => {
       { returnDocument: "after" },
     );
 
-    console.log("Updated post with new comment:", updatedPost);
-
     await post.save();
 
     return res.status(201).json({

@@ -42,7 +42,7 @@ export function useFollowUser() {
 
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: followKeys.all });
-      toast.success(data.message); // 🔥 dynamic message from backend
+      toast.success(data.message);
     },
 
     onError: (error) => {
@@ -86,8 +86,6 @@ export function useAcceptFollowRequest() {
   });
 }
 
-/* ================= REJECT FOLLOW REQUEST ================= */
-
 export function useRejectFollowRequest() {
   const queryClient = useQueryClient();
 
@@ -105,5 +103,25 @@ export function useRejectFollowRequest() {
     },
 
     onError: handleError,
+  });
+}
+
+export function useGetFollowers(followerId: string) {
+  return useQuery({
+    queryKey: followKeys.followers(followerId),
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/follow/followers/${followerId}`);
+      return res.data.followers;
+    },
+  });
+}
+
+export function useGetFollowing(followingId: string) {
+  return useQuery({
+    queryKey: followKeys.following(followingId),
+    queryFn: async () => {
+      const res = await axiosInstance.get(`/follow/following/${followingId}`);
+      return res.data.following;
+    },
   });
 }

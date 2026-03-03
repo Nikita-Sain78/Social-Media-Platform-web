@@ -1,15 +1,15 @@
 import express from "express";
+
+import { protectRoute } from "../middlewares/auth.middleware";
 import {
   followUser,
-  unfollowUser,
   getFollowers,
   getFollowing,
+  unfollowUser,
 } from "../controllers/follow.controller";
-import { protectRoute } from "../middlewares/auth.middleware";
 
 const router = express.Router();
 
-// Follow/unfollow
 router.post("/:id", protectRoute, followUser);
 router.delete("/unfollow/:id", protectRoute, unfollowUser);
 

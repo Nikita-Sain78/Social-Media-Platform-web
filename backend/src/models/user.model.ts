@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema(
     socialLinks: {
       type: String,
     },
+    accountType: {
+      type: String,
+      enum: ["Public", "Private"],
+      default: "Public",
+    },
     followers: [
       {
         Count: { type: Number },

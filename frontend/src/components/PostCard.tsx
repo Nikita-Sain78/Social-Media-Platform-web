@@ -112,7 +112,13 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { Heart, MessageCircle, Bookmark, MoreHorizontal } from "lucide-react";
+import {
+  Heart,
+  MessageCircle,
+  Bookmark,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
 import Avatar from "./Avatar";
 import {
   useAddComment,
@@ -252,7 +258,7 @@ export default function PostCard({ post }: { post: any }) {
                   <span className="text-xs font-semibold text-gray-800">
                     {c.commentedBy?.fullName ?? "Unknown"}
                   </span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col-reverse items-center gap-2">
                     <span className="text-[10px] text-gray-400">
                       {new Date(c.commentedAt).toLocaleDateString("en-US", {
                         month: "short",
@@ -268,7 +274,7 @@ export default function PostCard({ post }: { post: any }) {
                         }
                         className="text-[10px] text-rose-400 hover:text-rose-600 transition-colors font-medium"
                       >
-                        Delete
+                        <Trash2 className="size-3" />
                       </button>
                     )}
                   </div>

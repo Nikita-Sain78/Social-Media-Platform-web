@@ -157,3 +157,19 @@ export function useGetFeedPosts() {
     },
   });
 }
+
+export function useToggleAccountType() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.patch("/auth/toggle-account");
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success(data.message);
+    },
+    onError: handleError,
+  });
+}

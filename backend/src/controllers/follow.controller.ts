@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import Follow from "../models/follow.model";
-// import User from "../models/user.model";
 
 // Follow a user
 export const followUser = async (req: Request, res: Response) => {

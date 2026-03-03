@@ -7,11 +7,21 @@ import { POSTS } from "@/lib/data";
 import { useAuthUser } from "@/hooks/useAuth";
 import { useGetMyPosts } from "@/hooks/usePost";
 import Link from "next/link";
+import {
+  followKeys,
+  useGetFollowRequests,
+  // useGetFollowers,
+  // useGetFollowing,
+} from "@/hooks/useFollow";
 
 export default function ProfilePage() {
   const authUser = useAuthUser();
+  const auth = authUser.authUser;
   const { data: myPosts } = useGetMyPosts();
-  console.log(myPosts, "posts");
+  const { data: following } = useGetFollowRequests();
+  console.log("following", following);
+  // const { data: followers } = useGetFollowers(auth?._id ?? "");
+  // console.log(following, "following");
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-5">
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
@@ -47,10 +57,10 @@ export default function ProfilePage() {
             Building things on the internet. Love design, code and coffee ☕
           </p>
           <div className="flex gap-6 mt-4">
-            {[
-              ["248", "Posts"],
-              ["4.2k", "Followers"],
-              ["312", "Following"],
+            {/* {[
+              [`${myPosts?.length ?? 0}`, "Posts"], // ✅ dynamic post count
+              [`${followers?.length ?? 0}`, "Followers"], // ✅ dynamic followers
+              [`${following?.length ?? 0}`, "Following"], // ✅ dynamic following
             ].map(([val, lbl]) => (
               <div key={lbl} className="text-center">
                 <p className="font-extrabold text-gray-900 text-lg leading-none">
@@ -58,7 +68,7 @@ export default function ProfilePage() {
                 </p>
                 <p className="text-xs text-gray-400">{lbl}</p>
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
       </div>

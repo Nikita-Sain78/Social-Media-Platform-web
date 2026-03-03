@@ -24,6 +24,7 @@ import postRoutes from "./routes/post.route";
 import likeRoutes from "./routes/like.route";
 import commentRoutes from "./routes/comment.route";
 import followRoutes from "./routes/follow.route";
+import followRequestRoutes from "./routes/followRequest.route";
 import { app, server } from "./lib/socket";
 import dbConnection from "./config/dbConnection";
 
@@ -45,13 +46,6 @@ app.use(
 app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "ok", message: "Server is running" });
 });
-
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/posts", postRoutes);
-app.use("/api/like", likeRoutes);
-app.use("/api/comment", commentRoutes);
-app.use("/api/follow", followRoutes);
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);

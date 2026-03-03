@@ -40,6 +40,7 @@ export const signup = async (req: Request, res: Response) => {
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        accountType: newUser.accountType,
       });
     } else {
       res.status(400).json({ message: "Invalid user data" });
@@ -130,5 +131,23 @@ export const getAllUsers = async (req: Request, res: Response) => {
   } catch (error) {
     console.log("Error in checkAuth controller", (error as Error).message);
     res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const toggleAccountType = async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.accountType = user.accountType === "Public" ? "Private" : "Public";
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      accountType: user.accountType,
+      message: `Account is now ${user.accountType}`,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };

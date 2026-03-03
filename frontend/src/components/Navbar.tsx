@@ -1,6 +1,6 @@
 import Link from "next/link";
 // import { useAuthStore } from "../store/useAuthStore";
-import { MessageSquare } from "lucide-react";
+import { Bell, MessageSquare } from "lucide-react";
 import { useAuthUser } from "@/hooks/useAuth";
 
 const Navbar = () => {
@@ -25,19 +25,12 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-8">
-            {/* <Link
-              to={"/settings"}
-              className={`
-              btn btn-sm gap-2 transition-colors            
-              `}
-            >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Settings</span>
-            </Link> */}
-
+            <Link href="/dashboard/notifications">
+              <Bell className="text-indigo-600 size-4" />
+            </Link>
             {authUser && (
               <>
-                <Link href={"/profile"} className={`btn btn-sm gap-2`}>
+                <Link href={"/edit-profile"} className={`btn btn-sm gap-2`}>
                   {/* <User className="size-5" /> */}
                   <img src={authUser.profilePic} className="size-7" />
                   {authUser.fullName}
